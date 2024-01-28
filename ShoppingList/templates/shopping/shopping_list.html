@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            padding: 10px;
+            position: relative;
+        }
+
+        .bought {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .actions a {
+            margin-left: 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .add-form {
+            margin-top: 20px;
+        }
+
+        .add-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .add-form input {
+            padding: 5px;
+            width: 200px;
+        }
+
+        .add-form button {
+            padding: 5px 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shopping List</h1>
+    <ul>
+        {% for item in items %}
+            <li {% if item.bought %}class="bought"{% endif %}>
+                {{ item.name }}
+                <div class="actions">
+                    {% if not item.bought %}
+                        <a href="{% url 'edit_item' item.id %}">Edytuj</a>
+                    {% endif %}
+                    <a href="{% url 'delete_item' item.id %}">Usuń</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <form class="add-form" method="post" action="{% url 'add_item' %}">
+        {% csrf_token %}
+        <label for="new_item">Nowy produkt:</label>
+        <input type="text" name="name" id="new_item" required>
+        <button type="submit">Dodaj produkt</button>
+    </form>
+</body>
+</html>
